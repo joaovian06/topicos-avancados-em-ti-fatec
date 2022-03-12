@@ -1,3 +1,8 @@
+// Considerando um vetor contendo 200 números
+// inteiros com valores entre 1 e 1000, gerado
+// aleatoriamente, exibir o valor do maior elemento
+// armazenado no vetor.
+
 function randomInteger(min, max) {
     return Math.random() * (max - min + 1) | 0;
 }

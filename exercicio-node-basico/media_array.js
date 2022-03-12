@@ -1,3 +1,7 @@
+// A partir de um vetor com 50 números inteiros com
+// valores entre 1 e 500, gerado aleatoriamente, exibir
+// a média dos valores armazenados neste vetor.
+
 function randomInteger(min, max) {
     return Math.random() * (max - min + 1) | 0;
 }
