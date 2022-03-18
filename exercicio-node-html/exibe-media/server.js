@@ -28,6 +28,6 @@ app.post('/media', urlencodedParser, function(req, res){
         dado = dado.toString().replace(`{{ media }}`, media);
         res.writeHead(200, { 'Content-Type': 'text/html' });
         res.write(dado);
-        res.end;
+        res.end();
     });
 }); 
