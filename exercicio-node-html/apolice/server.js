@@ -1,5 +1,3 @@
-
-
 var fs = require('fs');
 var http = require("http");
 var express = require('express');
@@ -19,30 +17,49 @@ app.get('/', function(req, res) {
       res.write(dado);
       res.end();
   }); 
-  
-  // app.use(express.static(path.join(__dirname, '/')));
 });
 
-app.post('/media', urlencodedParser, function(req, res){
+app.post('/apolice', urlencodedParser, function(req, res){
   fs.readFile('form.html', function(erro, dado) {
-    var soma = parseFloat(req.body.nota1) + parseFloat(req.body.nota2);
-    var media = soma / 2;
-    var situacaoAluno = '';
+    let nomeSegurado = req.body.nomeSegurado,
+        sexo = req.body.sexo,
+        anoNascimento = parseInt(req.body.anoNascimento),
+        marca = req.body.marca,
+        modelo = req.body.modelo,
+        anoFabricacao = parseInt(req.body.anoFabricacao),
+        valorVeiculo = parseFloat(req.body.valorVeiculo),
+        bonus = parseFloat(req.body.bonus)
 
-    if (media >= 6) {
-      situacaoAluno = 'Aprovado';
+    var dataHoje = new Date;
+    var anoAtual = dataHoje.getFullYear;
+    let idade = anoAtual - anoNascimento;
+
+    var valorApolice = 0;
+
+    if (anoFabricacao >= 2010) {
+      valorApolice = valorVeiculo * 1.25 / 100;
+    } else if (anoFabricacao >= 2000 && anoFabricacao <= 2009) {
+      valorApolice = valorVeiculo * 1.75 / 100;
+    } else if (anoFabricacao >= 1980 && anoFabricacao <= 1999) {
+      valorApolice = valorVeiculo * 2 / 100;
     } else {
-      situacaoAluno = 'Reprovado';
+      valorApolice = valorVeiculo * 2.5 / 100;
     }
 
-    var valores = {
-      'media': media,
-      'situacaoAluno': situacaoAluno
-    };
-
-    for(var chave in valores) {
-      dado = dado.toString().replace(`{{ ${chave} }}`, valores[chave]);
+    if (sexo == 'M') {
+      valorApolice = valorApolice * 1.05;
+    } else {
+      valorApolice = valorApolice * 0.90;
     }
+
+    if (idade < 30 || idade > 60 ) {
+      valorApolice = valorApolice * 1.2;
+    }
+
+    desconto = valorApolice * bonus / 100;
+    valorApolice = valorApolice - desconto;
+
+    dado = dado.toString().replace(`{{ Valor Apólice }}`, valorApolice);
     
     res.writeHead(200, { 'Content-Type': 'text/html' });
     res.write(dado);
